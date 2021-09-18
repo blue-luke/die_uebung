@@ -1,7 +1,15 @@
 require './lib/sourcecode.rb'
 
-describe 'fizzbuzz' do
-  it 'returns "fizz" when passed 3' do
-    expect(fizzbuzz(3)).to eq 'fizz'
+=begin
+describe 'check_gender' do
+  it 'returns "true" if check_gender function exists' do
+    expect(main.respond_to?(:check_gender)).to eq true
+  end
+end
+=end 
+
+describe 'check_gender' do
+  it 'returns "Well done!" when passed m' do
+    expect(check_gender("m")).to eq 'Well done!'
   end
 end
