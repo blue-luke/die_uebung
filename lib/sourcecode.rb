@@ -11,5 +11,13 @@ Loops until user exits
 =end
 
 def check_gender(answer)
-  "Well done!"
+  if answer == "m"
+    "Well done!"
+  end
+end
+
+def suggest_noun(response)
+  if response == "y"
+    "Pferd"
+  end
 end
