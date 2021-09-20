@@ -24,14 +24,16 @@
 # go into irb, then execute require './sourcecode.rb' to interact with the functions as if you were an object in ruby
 # =end
 
+@count_questions = 0
+@correct_answers = 0
 @noun_to_test = nil
 # @the_nouns_gender = nil
 @array_of_hashes = 
 [
-  masculine_nouns = {"Mann" => :der},
-  feminine_nouns = {"Frau" => :die},
-  neutral_nouns = {"Kind" => :das},
-  plural_nouns = {"Leute" => :die}
+  masculine_nouns = {"Mann" => :masculine},
+  feminine_nouns = {"Frau" => :feminine},
+  neutral_nouns = {"Kind" => :neutral},
+  plural_nouns = {"Leute" => :plural}
 ]
 
 def import_nouns
@@ -40,20 +42,25 @@ def import_nouns
     noun_and_gender = line.split(" ")
     case noun_and_gender[1]
       when "m"
-        @array_of_hashes[0][noun_and_gender[0]] = :der
+        @array_of_hashes[0][noun_and_gender[0]] = :masculine
       when "f"
-        @array_of_hashes[1][noun_and_gender[0]] = :die
+        @array_of_hashes[1][noun_and_gender[0]] = :feminine
       when "n"
-        @array_of_hashes[2][noun_and_gender[0]] = :das
+        @array_of_hashes[2][noun_and_gender[0]] = :neutral
       when "Pl"
-        @array_of_hashes[3][noun_and_gender[0]] = :die
+        @array_of_hashes[3][noun_and_gender[0]] = :plural
     end
   end
   file.close
-  @array_of_hashes.each do |x|
-    puts x.count
-  end
+  number_of_nouns
+end
 
+def number_of_nouns
+  sum = 0
+  @array_of_hashes.each do |x|
+    sum += x.count
+  end
+  puts "There are #{sum} nouns in the database"
 end
 
 def get_a_response
@@ -89,22 +96,38 @@ end
 def check_answer(gender)
   map_answers =
   {
-    "m" => :der,
-    "f" => :die,
-    "n" => :das,
-    "p" => :die
+    "m" => :masculine,
+    "f" => :feminine,
+    "n" => :neutral,
+    "p" => :plural
   }
   puts "What is the gender of #{@noun_to_test}? Enter m, f, n, p"
   user_guess = gets.chomp
-  puts "Your guess is #{user_guess}, which corresponds to #{map_answers[user_guess]}"
-  puts "The nouns gender is #{gender}"
-  puts gender
-  puts "The map of answers says that the gender should be #{map_answers[user_guess]}"
+  count_questions
+  # puts "Your guess is #{user_guess}, which corresponds to #{map_answers[user_guess]}"
+  # puts "The nouns gender is #{gender}"
+  # puts gender
+  # puts "The map of answers says that the gender should be #{map_answers[user_guess]}"
   if gender == map_answers[user_guess]
     puts "Well done!"
+    count_correct_answers
+    state_score
   else
-    "Sorry, that's wrong!"
+    puts "Sorry, that's wrong! It is #{gender}"
+    state_score
   end
+end
+
+def count_questions
+  @count_questions += 1
+end
+
+def count_correct_answers
+  @correct_answers += 1
+end
+
+def state_score
+  puts "Your score is #{@correct_answers} out of #{@count_questions}"
 end
 
 def start
