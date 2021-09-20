@@ -94,4 +94,5 @@ def suggest_noun
     exit
   end
 end
-# suggest_noun
+
+suggest_noun
