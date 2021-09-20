@@ -15,28 +15,46 @@ But there must be away to do it without instance variables
 There is - pass functions as arguments
 this makes their return value available to other functions
 return to this
+@array_of_hashes is returning nil, find out why, next step
+
+The reason for TDD is now clear. If you have no tests
+already, you'll just blast away at coding
+never get any feedback until you run the whole thing
+then spend ages addressing all the errors,
+it's hard for you and other people
+to know where you got to!
 =end
+
+@masculine_nouns = {"Mann" => :der}
+@feminine_nouns = {"Frau" => :die}
+@neutral_nouns = {"Kind" => :das}
+@plural_nouns = {"Leute" => :die}
+
+@array_of_hashes = 
+  [
+    @masculine_nouns,
+    @feminine_nouns,
+    @neutral_nouns,
+    @plural_nouns
+  ]
+
+@random_noun = ""
 
 def select_noun
 
-  masculine_nouns = {"Mann" => :der}
-  feminine_nouns = {"Frau" => :die}
-  neutral_nouns = {"Kind" => :das}
-  plural_nouns = {"Leute" => :die}
+  random_hash = @array_of_hashes.sample
+  random_noun = random_hash.keys.sample
+  @random_noun = random_noun
 
-  array_of_hashes = 
-    [
-      masculine_nouns,
-      feminine_nouns,
-      neutral_nouns,
-      plural_nouns
-    ]
+end
 
-  random_hash = array_of_hashes.sample
-  @random_noun = random_hash.keys.sample
-  @the_nouns_gender = random_hash[@random_noun]
-  @random_noun
-
+def return_noun_gender
+  @array_of_hashes.each do |hash|
+    if hash.keys.include?(@random_noun)
+      the_nouns_gender = hash[@random_noun]
+    end
+  end
+  the_nouns_gender
 end
 
 def present_noun
@@ -45,10 +63,10 @@ end
 
 def get_gender
   puts "Enter m, w, n or p"
-  @answer = gets.chomp
+  answer = gets.chomp
 end
 
-def check_gender
+def check_gender(the_nouns_gender, get_gender)
   convert_gender_names = 
   {
     "m" => "der",
@@ -56,10 +74,10 @@ def check_gender
     "n" => "das",
     "p" => "die"
   }
-  if convert_gender_names[@answer].to_sym == @the_nouns_gender
+  if convert_gender_names[get_gender].to_sym == the_nouns_gender
     "Well done!"
   else
-    puts "Sorry, that's wrong! The noun's gender is #{@the_nouns_gender}"
+    puts "Sorry, that's wrong! The noun's gender is #{the_nouns_gender}"
   end
 end
 
@@ -69,13 +87,11 @@ def suggest_noun
   if response == "y"
     select_noun
     present_noun
-    get_gender
-    check_gender
+    check_gender(return_noun_gender, get_gender)
     suggest_noun
   elsif response == "n"
     "Bye!"
     exit
   end
 end
-
-suggest_noun
+# suggest_noun
